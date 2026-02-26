@@ -1,6 +1,6 @@
 import { Link } from "wouter";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/Button";
+import { Button } from "@/components/ui/button";
 import { Shield, Globe, TrendingUp, Lock } from "lucide-react";
 
 export default function Landing() {
