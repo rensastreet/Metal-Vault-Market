@@ -23,7 +23,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
             <Shield className="w-4 h-4 text-black" />
           </div>
           <span className="font-display font-bold text-xl tracking-wide text-gradient-gold">
-            AuraVault
+            Rensa Street
           </span>
         </div>
 

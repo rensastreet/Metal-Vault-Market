@@ -18,7 +18,7 @@ export default function Landing() {
             <Shield className="w-5 h-5 text-black" />
           </div>
           <span className="font-display font-bold text-2xl tracking-wide text-gradient-gold">
-            AuraVault
+            Rensa Street
           </span>
         </div>
         <a href="/api/login">
