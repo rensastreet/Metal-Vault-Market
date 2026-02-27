@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Shield, Globe, TrendingUp, Lock } from "lucide-react";
+import GlobeMap from "@/components/GlobeMap";
 
 export default function Landing() {
   return (
@@ -58,7 +59,7 @@ export default function Landing() {
               variant="outline" 
               className="w-full sm:w-auto bg-black/40 backdrop-blur-md"
               data-testid="button-explore-locations"
-              onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={() => document.getElementById('map')?.scrollIntoView({ behavior: 'smooth' })}
             >
               Explore Locations
             </Button>
@@ -87,6 +88,35 @@ export default function Landing() {
             </div>
           ))}
         </motion.div>
+
+        {/* Global Map Section */}
+        <section id="map" className="w-full max-w-6xl mx-auto mt-32 px-4 pb-24" data-testid="section-map">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-2xl md:text-4xl font-display font-bold text-foreground mb-4">
+              Global <span className="text-gradient-gold">Network</span>
+            </h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Our secure infrastructure spans the globe, providing physical asset protection in the world's most stable jurisdictions. Click a vault to begin trading.
+            </p>
+          </motion.div>
+          
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1 }}
+            viewport={{ once: true }}
+            className="h-[400px] md:h-[600px] w-full relative"
+            data-testid="container-map"
+          >
+            <GlobeMap onVaultSelect={() => window.location.href = "/api/login"} />
+          </motion.div>
+        </section>
       </main>
       
       {/* Abstract background image for texture */}
