@@ -49,11 +49,17 @@ export default function Landing() {
           
           <div className="pt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
             <a href="/api/login">
-              <Button size="lg" variant="premium" className="w-full sm:w-auto">
+              <Button size="lg" variant="premium" className="w-full sm:w-auto" data-testid="button-open-vault">
                 Open Your Vault
               </Button>
             </a>
-            <Button size="lg" variant="outline" className="w-full sm:w-auto bg-black/40 backdrop-blur-md">
+            <Button 
+              size="lg" 
+              variant="outline" 
+              className="w-full sm:w-auto bg-black/40 backdrop-blur-md"
+              data-testid="button-explore-locations"
+              onClick={() => document.getElementById('features')?.scrollIntoView({ behavior: 'smooth' })}
+            >
               Explore Locations
             </Button>
           </div>
@@ -61,6 +67,7 @@ export default function Landing() {
 
         {/* Feature Grid */}
         <motion.div 
+          id="features"
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.3 }}
