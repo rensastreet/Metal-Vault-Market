@@ -16,14 +16,17 @@ export default function Dashboard() {
   const { data: metals = [] } = useMetals();
   const { data: transactions = [] } = useTransactions();
 
-  // Calculate total portfolio value
-  const totalValue = portfolio.reduce((acc, item) => {
-    const metal = metals.find(m => m.id === item.metalId);
+  // Calculate total portfolio value safely
+  const totalValue = (portfolio || []).reduce((acc, item) => {
+    const metal = (metals || []).find(m => m.id === item.metalId);
     if (!metal) return acc;
-    return acc + (parseFloat(item.quantity) * parseFloat(metal.currentPrice));
+    const quantity = parseFloat(item.quantity);
+    const price = parseFloat(metal.currentPrice);
+    if (isNaN(quantity) || isNaN(price)) return acc;
+    return acc + (quantity * price);
   }, 0);
 
-  const recentTx = [...transactions].sort((a, b) => 
+  const recentTx = [...(transactions || [])].sort((a, b) => 
     new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
   ).slice(0, 5);
 
