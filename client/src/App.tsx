@@ -7,6 +7,7 @@ import NotFound from "@/pages/not-found";
 import Landing from "@/pages/Landing";
 import Dashboard from "@/pages/Dashboard";
 import Portfolio from "@/pages/Portfolio";
+import Transactions from "@/pages/Transactions";
 import Layout from "@/components/Layout";
 import { useAuth } from "@/hooks/use-auth";
 
@@ -35,6 +36,7 @@ function Router() {
       <Switch>
         <Route path="/" component={Dashboard} />
         <Route path="/portfolio" component={Portfolio} />
+        <Route path="/transactions" component={Transactions} />
         <Route component={NotFound} />
       </Switch>
     </Layout>
