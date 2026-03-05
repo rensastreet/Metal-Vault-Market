@@ -17,6 +17,11 @@ export default function VaultPanel({ vault, onClose }: VaultPanelProps) {
   const { data: metals = [] } = useMetals();
   const { data: portfolio = [] } = usePortfolio();
   const createTransaction = useCreateTransaction();
+
+  const isDelaware = vault?.name.includes("Delaware");
+  const filteredMetals = metals.filter(m => 
+    isDelaware ? m.symbol === "DSD" : m.symbol !== "DSD"
+  );
   
   const [selectedMetal, setSelectedMetal] = useState<number | null>(null);
   const [quantity, setQuantity] = useState<string>("");
@@ -84,10 +89,14 @@ export default function VaultPanel({ vault, onClose }: VaultPanelProps) {
               {/* Markets */}
               <div className="space-y-3 mb-8">
                 <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-xs font-bold uppercase tracking-widest text-primary">Current Inventory</h3>
-                  <span className="text-[10px] text-muted-foreground bg-white/5 px-2 py-0.5 rounded-full border border-white/5">Spot + 0.5% Premium</span>
+                  <h3 className="text-xs font-bold uppercase tracking-widest text-primary">
+                    {isDelaware ? "Commodity Inventory" : "Current Inventory"}
+                  </h3>
+                  <span className="text-[10px] text-muted-foreground bg-white/5 px-2 py-0.5 rounded-full border border-white/5">
+                    {isDelaware ? "Direct via Diamond Standard" : "Spot + 0.5% Premium"}
+                  </span>
                 </div>
-                {metals.map(metal => {
+                {filteredMetals.map(metal => {
                   const isSelected = selectedMetal === metal.id;
                   const holdings = getMetalHoldings(metal.id);
                   
@@ -116,7 +125,7 @@ export default function VaultPanel({ vault, onClose }: VaultPanelProps) {
                               {metal.name}
                             </p>
                             <p className={`text-xs ${isSelected ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
-                              {metal.symbol} • Physical Bullion
+                              {metal.symbol} • {isDelaware ? "Certified Diamond Standard" : "Physical Bullion"}
                             </p>
                           </div>
                         </div>
@@ -175,15 +184,17 @@ export default function VaultPanel({ vault, onClose }: VaultPanelProps) {
                         <div className="relative group">
                           <input 
                             type="number" 
-                            step="0.001"
-                            min="0.001"
+                            step={isDelaware ? "1" : "0.001"}
+                            min={isDelaware ? "1" : "0.001"}
                             required
                             value={quantity}
                             onChange={(e) => setQuantity(e.target.value)}
                             className="w-full bg-black/60 border border-white/10 rounded-xl px-5 py-4 text-xl text-foreground font-mono focus:outline-none focus:border-primary/50 focus:ring-4 focus:ring-primary/5 transition-all"
-                            placeholder="0.000"
+                            placeholder={isDelaware ? "0" : "0.000"}
                           />
-                          <span className="absolute right-5 top-1/2 -translate-y-1/2 text-muted-foreground font-bold text-sm">OZ</span>
+                          <span className="absolute right-5 top-1/2 -translate-y-1/2 text-muted-foreground font-bold text-sm">
+                            {isDelaware ? "UNITS" : "OZ"}
+                          </span>
                         </div>
                       </div>
 
@@ -194,7 +205,7 @@ export default function VaultPanel({ vault, onClose }: VaultPanelProps) {
                         </div>
                         <div className="flex justify-between items-end">
                           <p className="text-2xl font-display font-bold text-foreground">
-                            {quantity ? formatCurrency(parseFloat(quantity) * parseFloat(metals.find(m => m.id === selectedMetal)?.currentPrice || "0")) : "$0.00"}
+                            {quantity ? formatCurrency(parseFloat(quantity) * parseFloat(filteredMetals.find(m => m.id === selectedMetal)?.currentPrice || "0")) : "$0.00"}
                           </p>
                           <div className="flex items-center gap-1.5 text-[10px] text-emerald-500 font-bold bg-emerald-500/10 px-2 py-1 rounded-lg">
                             <TrendingUp className="w-3 h-3" />
@@ -213,7 +224,9 @@ export default function VaultPanel({ vault, onClose }: VaultPanelProps) {
                           {createTransaction.isPending ? "Transacting..." : `Confirm ${tradeType === 'buy' ? 'Acquisition' : 'Liquidation'}`}
                         </Button>
                         <p className="text-[9px] text-center text-muted-foreground mt-4 leading-relaxed px-4">
-                          By confirming, you authorize Rensa Street to execute this physical trade and allocate holdings to your private vault sub-account.
+                          {isDelaware 
+                            ? "By confirming, you authorize Rensa Street to acquire Diamond Standard certified commodities to be held in your Delaware sub-account."
+                            : "By confirming, you authorize Rensa Street to execute this physical trade and allocate holdings to your private vault sub-account."}
                         </p>
                       </div>
                     </div>
