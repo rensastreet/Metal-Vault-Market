@@ -14,9 +14,10 @@ const geoUrl = "https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json";
 
 interface GlobeMapProps {
   onVaultSelect: (vault: VaultResponse) => void;
+  hoverContent?: (vaultId: number) => React.ReactNode;
 }
 
-export default function GlobeMap({ onVaultSelect }: GlobeMapProps) {
+export default function GlobeMap({ onVaultSelect, hoverContent }: GlobeMapProps) {
   const { data: vaults = [] } = useVaults();
   const [hoveredVault, setHoveredVault] = useState<number | null>(null);
 
@@ -79,13 +80,22 @@ export default function GlobeMap({ onVaultSelect }: GlobeMapProps) {
                 />
                 
                 {isHovered && (
-                  <text
-                    textAnchor="middle"
-                    y={-15}
-                    className="fill-white font-display text-xs font-semibold drop-shadow-md"
-                  >
-                    {vault.name}
-                  </text>
+                  <g>
+                    <text
+                      textAnchor="middle"
+                      y={-15}
+                      className="fill-white font-display text-xs font-semibold drop-shadow-md pointer-events-none"
+                    >
+                      {vault.name}
+                    </text>
+                    {hoverContent && (
+                      <foreignObject x="-60" y="5" width="120" height="80" className="pointer-events-none">
+                        <div className="bg-black/80 backdrop-blur-md border border-white/10 rounded-lg p-2 shadow-xl">
+                          {hoverContent(vault.id)}
+                        </div>
+                      </foreignObject>
+                    )}
+                  </g>
                 )}
               </Marker>
             );

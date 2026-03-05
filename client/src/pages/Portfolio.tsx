@@ -103,7 +103,23 @@ export default function Portfolio() {
           <CardTitle>Vault Allocation Map</CardTitle>
         </CardHeader>
         <CardContent className="h-[400px] p-0 overflow-hidden rounded-b-xl">
-          <GlobeMap onVaultSelect={() => {}} />
+          <GlobeMap 
+            onVaultSelect={() => {}} 
+            hoverContent={(vaultId) => {
+              const vaultHoldings = holdings.filter(h => h.vaultId === vaultId);
+              if (vaultHoldings.length === 0) return <p className="text-[10px] text-muted-foreground text-center">No holdings here</p>;
+              return (
+                <div className="space-y-1">
+                  {vaultHoldings.map((h, i) => (
+                    <div key={i} className="flex justify-between items-center gap-2">
+                      <span className="text-[10px] font-medium text-white">{h.metal?.symbol}</span>
+                      <span className="text-[10px] font-mono text-primary">{parseFloat(h.quantity).toFixed(2)} oz</span>
+                    </div>
+                  ))}
+                </div>
+              );
+            }}
+          />
         </CardContent>
       </Card>
 
