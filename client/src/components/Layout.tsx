@@ -9,7 +9,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const { user, logout } = useAuth();
 
   const navItems = [
-    { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+    { href: "/", label: "Marketplace", icon: LayoutDashboard },
     { href: "/portfolio", label: "Portfolio", icon: Briefcase },
     { href: "/transactions", label: "Transactions", icon: History },
   ];
