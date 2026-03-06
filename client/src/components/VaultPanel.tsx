@@ -19,9 +19,15 @@ export default function VaultPanel({ vault, onClose }: VaultPanelProps) {
   const createTransaction = useCreateTransaction();
 
   const isDelaware = vault?.name.includes("Delaware");
-  const filteredMetals = metals.filter(m => 
-    isDelaware ? m.symbol === "DSD" : m.symbol !== "DSD"
-  );
+  const isFrankfurt = vault?.name.includes("Frankfurt");
+  
+  const rareEarths = ["DY", "ND", "PR", "TB"];
+  
+  const filteredMetals = metals.filter(m => {
+    if (isDelaware) return m.symbol === "DSD";
+    if (isFrankfurt) return rareEarths.includes(m.symbol);
+    return m.symbol !== "DSD" && !rareEarths.includes(m.symbol);
+  });
   
   const [selectedMetal, setSelectedMetal] = useState<number | null>(null);
   const [quantity, setQuantity] = useState<string>("");
@@ -90,10 +96,10 @@ export default function VaultPanel({ vault, onClose }: VaultPanelProps) {
               <div className="space-y-3 mb-8">
                 <div className="flex items-center justify-between mb-2">
                   <h3 className="text-xs font-bold uppercase tracking-widest text-primary">
-                    {isDelaware ? "Commodity Inventory" : "Current Inventory"}
+                    {isDelaware ? "Commodity Inventory" : isFrankfurt ? "Rare Earth Inventory" : "Current Inventory"}
                   </h3>
                   <span className="text-[10px] text-muted-foreground bg-white/5 px-2 py-0.5 rounded-full border border-white/5">
-                    {isDelaware ? "Direct via Diamond Standard" : "Spot + 0.5% Premium"}
+                    {isDelaware ? "Direct via Diamond Standard" : isFrankfurt ? "Industrial Grade" : "Spot + 0.5% Premium"}
                   </span>
                 </div>
                 {filteredMetals.map(metal => {
@@ -125,7 +131,7 @@ export default function VaultPanel({ vault, onClose }: VaultPanelProps) {
                               {metal.name}
                             </p>
                             <p className={`text-xs ${isSelected ? "text-primary-foreground/70" : "text-muted-foreground"}`}>
-                              {metal.symbol} • {isDelaware ? "Certified Diamond Standard" : "Physical Bullion"}
+                              {metal.symbol} • {isDelaware ? "Certified Diamond Standard" : isFrankfurt ? "Rare Earth Element" : "Physical Bullion"}
                             </p>
                           </div>
                         </div>
@@ -193,7 +199,7 @@ export default function VaultPanel({ vault, onClose }: VaultPanelProps) {
                             placeholder={isDelaware ? "0" : "0.000"}
                           />
                           <span className="absolute right-5 top-1/2 -translate-y-1/2 text-muted-foreground font-bold text-sm">
-                            {isDelaware ? "UNITS" : "OZ"}
+                            {isDelaware ? "UNITS" : isFrankfurt ? "KG" : "OZ"}
                           </span>
                         </div>
                       </div>

@@ -16,6 +16,10 @@ async function seedDatabase() {
       { name: "Platinum", symbol: "XPT", currentPrice: "1050.00" },
       { name: "Palladium", symbol: "XPD", currentPrice: "1020.20" },
       { name: "Diamonds", symbol: "DSD", currentPrice: "5250.00" },
+      { name: "Dysprosium", symbol: "DY", currentPrice: "450.00" },
+      { name: "Neodymium", symbol: "ND", currentPrice: "120.00" },
+      { name: "Praseodymium", symbol: "PR", currentPrice: "110.00" },
+      { name: "Terbium", symbol: "TB", currentPrice: "1500.00" },
     ];
     for (const m of seedMetals) {
       await db.insert(metals).values(m);
